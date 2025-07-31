@@ -1,0 +1,26 @@
+{
+  "name": "always-teamlog-template",
+  "version": "0.0.1",
+  "description": "Discord always template worker.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^0.27.1",
+    "mongoose": "^8.5.2",
+    "eris": "^0.17.1",
+    "express": "*",
+    "node-fetch": "^2.6.2",
+    "pretty-ms": "*",
+    "random-token": "^0.0.6",
+    "socket.io-client": "^4.7.4"
+  },
+  "license": "MIT",
+  "keywords": [
+    "teamlog",
+    "always",
+    "online",
+    "discord"
+  ]
+}
