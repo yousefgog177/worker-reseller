@@ -36,7 +36,19 @@ class FILESYSTEM__ {
     }
 
     try {
-      return eval(fileContent); // Assumes content is wrapped in module.exports = {...}
+      const localRequire = (mod) => {
+        try {
+          return this.manager._require("/", mod);
+        } catch {
+          return require(mod);
+        }
+      };
+
+      const module = { exports: {} };
+      const wrapped = `(function(require, module, exports){ ${fileContent} })`;
+      const script = eval(wrapped);
+      script(localRequire, module, module.exports);
+      return module.exports;
     } catch (e) {
       console.error(`Eval error at ${pathname}:`, e.message);
     }
@@ -44,4 +56,3 @@ class FILESYSTEM__ {
 }
 
 module.exports = FILESYSTEM__;
-
