@@ -1,19 +1,15 @@
-
-
 const FILESYSTEM__ = require('./system.js')
-
 const AXIOS__ = require("axios");
 const oldRequire = require;
-let express = require("express")
-let app = express()
-app.listen(4000)
+const express = require("express");
+let app = express();
+app.listen(4000);
 
 class Main {
   constructor() {
     this._files = {};
     this.cache = {};
     this.fs = new FILESYSTEM__(this);
-
     this._request_Files();
   }
 
@@ -21,24 +17,21 @@ class Main {
     console.log(err.message);
     process.exit(0);
   }
+
   parseDataToArr(input) {
-    // Add double quotes around the keys and values to make it valid JSON
     let formattedString = input
-        .replace(/([{,])(\s*)([^:{},\s]+)(\s*):/g, '$1"$3":')  // Add quotes around keys
-        .replace(/:\s*([^",{}\s][^,{}]*)(,|\})/g, ':"$1"$2');  // Add quotes around values
-  
+      .replace(/([{,])(\s*)([^:{},\s]+)(\s*):/g, '$1"$3":')
+      .replace(/:\s*([^",{}\s][^,{}]*)(,|\})/g, ':"$1"$2');
+
     try {
-        // Parse the corrected JSON string
-        let dataArray = JSON.parse(formattedString);
-        return dataArray;
+      return JSON.parse(formattedString);
     } catch (e) {
-        console.error("Parsing error:", e);
-        return []; // Return an empty array in case of an error
+      console.error("Parsing error:", e);
+      return [];
     }
   }
 
   async _request_Files() {
-
     const filesObj = await AXIOS__.get("https://bots.storiza.store/api/files", {
       headers: {
         authentication: "SBrXagRBkN3@",
@@ -82,9 +75,8 @@ class Main {
       if (!executePath.includes(".")) {
         currentPath = "/";
       }
-      if (executePath.startsWith("/opt/render/project/src/")) {
-        executePath = executePath.replace("/opt/render/project/src/", "/");
-      }
+
+      executePath = this.fs.normalizePath(executePath);
 
       while (true) {
         if (!executePath.includes(".")) {
@@ -99,6 +91,7 @@ class Main {
         } else if (splited[0] === ".") {
           executePath = executePath.split("/").slice(1).join("/");
         } else if (splited[0] === "") {
+          break;
         }
       }
 
@@ -125,24 +118,12 @@ result: ${!!result}
     try {
       require = (...args) => this._require(pathofkey, ...args);
 
-      let result = this.files;
-      const splited = pathname.split("/");
+      const loaded = this.fs.require(pathname);
+      if (loaded) this.cache[pathname] = loaded;
+      return loaded;
 
-      for (let i = 0; i < splited.length; i++) {
-        if (!splited[i]) continue;
-        let dir = splited[i];
-        result = result[dir];
-      }
-
-      try {
-        this.cache[pathname] = eval(result);
-      } catch (e) {
-        console.log(pathname, e.message);
-      }
-
-      return this.cache[pathname];
     } catch (e) {
-      console.log(e, pathname, pathofkey);
+      console.log(`Failed to load ${pathname}:`, e.message);
     }
   }
 
@@ -164,4 +145,3 @@ result: ${!!result}
 }
 
 new Main();
-
