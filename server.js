@@ -116,7 +116,14 @@ result: ${!!result}
 
   load_FromPath(pathname, pathofkey) {
     try {
-      require = (...args) => this._require(pathofkey, ...args);
+      // patched require fallback for unresolved modules
+      require = (mod) => {
+        try {
+          return this._require(pathofkey, mod);
+        } catch {
+          return oldRequire(mod);
+        }
+      };
 
       const loaded = this.fs.require(pathname);
       if (loaded) this.cache[pathname] = loaded;
