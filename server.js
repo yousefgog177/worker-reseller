@@ -74,10 +74,9 @@ if (executePath.endsWith(".js") || executePath.endsWith(".json")) {
   executePath = executePath.slice(0, executePath.length - 1).join(".");
 }
 
-// Glitch-specific logic removed
-// if (executePath.startsWith("/app/")) {
-//   executePath = executePath.replace("/app/", "/");
-// }
+if (executePath.startsWith("/opt/render/project/")) {
+  executePath = executePath.replace("/opt/render/project/", "/");
+}
 
 if (!executePath.includes(".")) {
   currentPath = "/";
@@ -162,4 +161,5 @@ result: ${!!result}
 }
 
 new Main();
+
 
