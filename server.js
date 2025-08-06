@@ -68,38 +68,37 @@ class Main {
       let target = "";
       let extention = "";
 
-      if (executePath.endsWith(".js") || executePath.endsWith(".json")) {
-        extention = executePath.endsWith(".js") ? ".js" : ".json";
-        executePath = executePath.split(".");
-        executePath = executePath.slice(0, executePath.length - 1).join(".");
-      }
+if (executePath.endsWith(".js") || executePath.endsWith(".json")) {
+  extention = executePath.endsWith(".js") ? ".js" : ".json";
+  executePath = executePath.split(".");
+  executePath = executePath.slice(0, executePath.length - 1).join(".");
+}
 
-      if (!executePath.includes(".")) {
-        currentPath = "/";
-      }
+// Glitch-specific logic removed
+// if (executePath.startsWith("/app/")) {
+//   executePath = executePath.replace("/app/", "/");
+// }
 
-      if (executePath.startsWith("/app/")) {
-        executePath = executePath.replace("/app/", "/");
-      }
+if (!executePath.includes(".")) {
+  currentPath = "/";
+}
 
-      while (true) {
-        if (!executePath.includes(".")) {
-          target = "/" + executePath + extention;
-          break;
-        }
-
-        const splited = executePath.split("/");
-        if (splited[0] === "..") {
-          currentPath = currentPath.split("/");
-          currentPath = currentPath.slice(0, currentPath.length - 1).join("/");
-          executePath = executePath.split("/").slice(1).join("/");
-        } else if (splited[0] === ".") {
-          executePath = executePath.split("/").slice(1).join("/");
-        } else if (splited[0] === "") {
-          // do nothing, continue
-          break;
-        }
-      }
+while (true) {
+  if (!executePath.includes(".")) {
+    target = (executePath.startsWith("/") ? "" : "/") + executePath + extention;
+    break;
+  }
+  const splited = executePath.split("/");
+  if (splited[0] === "..") {
+    currentPath = currentPath.split("/");
+    currentPath = currentPath.slice(0, currentPath.length - 1).join("/");
+    executePath = executePath.split("/").slice(1).join("/");
+  } else if (splited[0] === ".") {
+    executePath = executePath.split("/").slice(1).join("/");
+  } else if (splited[0] === "") {
+    break;
+  }
+}
 
       const result =
         this.cache[target] ||
@@ -163,3 +162,4 @@ result: ${!!result}
 }
 
 new Main();
+
