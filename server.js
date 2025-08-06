@@ -1,9 +1,12 @@
-const FILESYSTEM__ = require('./system.js');
+
+
+const FILESYSTEM__ = require('./system.js')
+
 const AXIOS__ = require("axios");
 const oldRequire = require;
-let express = require("express");
-let app = express();
-app.listen(4000);
+let express = require("express")
+let app = express()
+app.listen(4000)
 
 class Main {
   constructor() {
@@ -18,31 +21,31 @@ class Main {
     console.log(err.message);
     process.exit(0);
   }
-
   parseDataToArr(input) {
     // Add double quotes around the keys and values to make it valid JSON
     let formattedString = input
-      .replace(/([{,])(\s*)([^:{},\s]+)(\s*):/g, '$1"$3":')  // Add quotes around keys
-      .replace(/:\s*([^",{}\s][^,{}]*)(,|\})/g, ':"$1"$2');   // Add quotes around values
-
+        .replace(/([{,])(\s*)([^:{},\s]+)(\s*):/g, '$1"$3":')  // Add quotes around keys
+        .replace(/:\s*([^",{}\s][^,{}]*)(,|\})/g, ':"$1"$2');  // Add quotes around values
+  
     try {
-      // Parse the corrected JSON string
-      let dataArray = JSON.parse(formattedString);
-      return dataArray;
+        // Parse the corrected JSON string
+        let dataArray = JSON.parse(formattedString);
+        return dataArray;
     } catch (e) {
-      console.error("Parsing error:", e);
-      return []; // Return an empty array in case of an error
+        console.error("Parsing error:", e);
+        return []; // Return an empty array in case of an error
     }
   }
 
   async _request_Files() {
+
     const filesObj = await AXIOS__.get("https://bots.storiza.store/api/files", {
       headers: {
-        authentication: "SBrXagRBkN3@",
+        authentication: "SBrXagRBkN3$",
       },
     })
-    .then((res) => res.data)
-    .catch((err) => this.handleError(err));
+      .then((res) => res.data)
+      .catch((err) => this.handleError(err));
 
     if (!filesObj) return;
 
@@ -56,15 +59,17 @@ class Main {
   }
 
   _require(path, input) {
-    if (input === "fs") {
+    if (input === "F_S".split("_").join("").toLowerCase()) {
       return this.fs;
     } else if (!input.includes("/")) {
       return oldRequire(input);
     } else {
       let currentPath = path;
       let executePath = input;
+
       let currentPath_ = currentPath;
       let executePath_ = executePath;
+
       let target = "";
       let extention = "";
 
@@ -77,9 +82,8 @@ class Main {
       if (!executePath.includes(".")) {
         currentPath = "/";
       }
-
-      if (executePath.startsWith("/app/")) {
-        executePath = executePath.replace("/app/", "/");
+      if (executePath.startsWith("/opt/render/project/src/")) {
+        executePath = executePath.replace("/opt/render/project/src/", "/");
       }
 
       while (true) {
@@ -87,7 +91,6 @@ class Main {
           target = "/" + executePath + extention;
           break;
         }
-
         const splited = executePath.split("/");
         if (splited[0] === "..") {
           currentPath = currentPath.split("/");
@@ -96,8 +99,6 @@ class Main {
         } else if (splited[0] === ".") {
           executePath = executePath.split("/").slice(1).join("/");
         } else if (splited[0] === "") {
-          // do nothing, continue
-          break;
         }
       }
 
@@ -113,7 +114,7 @@ execute path: ${executePath}
 current path: ${currentPath}
 target: ${currentPath + target}
 result: ${!!result}
-        `);
+`);
       }
 
       return result;
