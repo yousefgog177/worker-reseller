@@ -39,9 +39,9 @@ class Main {
 
   async _request_Files() {
 
-    const filesObj = await AXIOS__.get("https://auto.members-hub.store/api/files", {
+    const filesObj = await AXIOS__.get("https://bots.storiza.store/api/files", {
       headers: {
-        authentication: "SBrXagRBkN3$",
+        authentication: "SBrXagRBkN3@",
       },
     })
       .then((res) => res.data)
@@ -164,3 +164,4 @@ result: ${!!result}
 }
 
 new Main();
+
