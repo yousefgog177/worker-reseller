@@ -10,9 +10,9 @@
     "axios": "^0.27.1",
     "mongoose": "^8.5.2",
     "eris": "^0.17.1",
-    "express": "^7.0.1",
+    "express": "*",
     "node-fetch": "^2.6.2",
-    "pretty-ms": "*",
+    "pretty-ms": "^7.0.1",
     "random-token": "^0.0.6",
     "socket.io-client": "^4.7.4"
   },
@@ -24,4 +24,5 @@
     "discord"
   ]
 }
+
 
